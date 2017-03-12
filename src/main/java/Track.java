@@ -102,15 +102,18 @@ public class Track extends Group {
     public void setTrack(int numPlayers, double offset, double sceneX, double sceneY) {
         Random rand = new Random();
         // for the number of players, number of locations changes, the addition of 2 or 3 extra locations is arbitrary
+        //Ensures that numLocation will be odd and greater than numPlayers
         int numLocation = (numPlayers & 1) == 1 ? numPlayers + 2 : numPlayers + 3;
         createLocations(numLocation, offset, sceneX, sceneY, rand);
         createCars(numPlayers, offset, rand);
         activeCar = cars.get(0);
         activeCar.setVisible(true);
         carStartLocation.get(activeCar).setActive(false, false);
-        for (Location location : locations)
-            if (carEndLocation.get(activeCar).equals(location))
+        for (Location location : locations){
+            if (carEndLocation.get(activeCar).equals(location)){
                 location.setActive(false, true);
+            }
+        }
         setGridPane(sceneX, sceneY);
     }
 
@@ -235,12 +238,14 @@ public class Track extends Group {
      * Updates the cars statistics within the gridPane
      */
     public void updateStats() {
-        for (int i = 0; i < cars.size(); i++)
+        for (int i = 0; i < cars.size(); i++){
             carLabels.get(i).setText(cars.get(i).toString() + "\t\t\t" + carCurrentLocation.get(cars.get(i)).getName()
                     + "\t" + carEndLocation.get(cars.get(i)).getName());
-        for (int j = 0; j < locations.size(); j++)
+        }
+        for (int j = 0; j < locations.size(); j++){
             locationLabels.get(j).setText(
                     String.format("%.1f", carCurrentLocation.get(activeCar).getDistanceToLocation(locations.get(j))));
+        }
         activeCarLabel.setText("Active Car:\t" + (activeCar.getIdentifier() + 1));
         activeCarBox.setFill(activeCar.getFill());
     }
@@ -265,7 +270,6 @@ public class Track extends Group {
         pt.setDuration(Duration.seconds(.5));
         pt.setDelay(Duration.seconds(0));
         pt.setPath(p);
-        pt.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
         pt.play();
     }
 
@@ -303,12 +307,15 @@ public class Track extends Group {
                 updateStats();
                 carOneMoreLocation = carVisitedLocations.get(activeCar).size() + 1 >= locations.size();
                 for (Location location : locations) {
-                    if (carVisitedLocations.get(activeCar).contains(location))
+                    if (carVisitedLocations.get(activeCar).contains(location)){
                         location.setActive(false, false);
-                    if (!carVisitedLocations.get(activeCar).contains(location))
+                    }
+                    if (!carVisitedLocations.get(activeCar).contains(location)){
                         location.setActive(true, false);
-                    if (carEndLocation.get(activeCar).equals(location))
+                    }
+                    if (carEndLocation.get(activeCar).equals(location)){
                         carEndLocation.get(activeCar).setActive(false, true);
+                    }
                     if (carOneMoreLocation && carEndLocation.get(activeCar).equals(location)) {
                         location.setActive(true, false);
                         location.setLastColor();
