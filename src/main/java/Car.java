@@ -14,17 +14,18 @@ public class Car extends Rectangle {
 
     /**
      * Components of a car. Contribute to time
-     * TODO: Create relationships between these components and calculation of time.
      * Engine will impact top speed, tires will impact acceleration, and weight will affect both.
      * Boost will affect how much quicker you go when you activate it.
      */
-     private int engine, tires, boost, weight;
+    private int engine, tires, boost, weight;
 
-     /** This is what all the components should add up to. */
-     private int total;
+    /** This is what all the components should add up to. */
+    private int total;
 
-    /** TODO: Turbo boost?? */
-    private boolean isBoosted;
+//    /** TODO: Turbo boost?? 
+//     * This was something we thought about implementing but didn't get a chance to. For the future, maybe.
+//     */
+//    private boolean isBoosted;
 
     /** The total time the car has driven for. Proportional to the distance traveled and components. */
     private double time;
@@ -41,7 +42,7 @@ public class Car extends Rectangle {
      */
     public Car(double x, double y, double offset, int id) {
         super(x, y, offset, offset);
-        primeStats(26);
+        primeStats(18);
         this.id = id;
         String[] names = { "bug", "blue", "black", "yellow","orange"};
         URL resource = getClass().getResource("/main/resources/images/" + names[id % names.length] + ".png");
@@ -63,12 +64,7 @@ public class Car extends Rectangle {
         }while(ran>total);
         tires = ran; total -= ran;
 
-        do {
-            ran = (int) ((Math.random() * 10) + 1);
-        }while(ran>total);
-        weight = ran; total -= ran;
-
-        boost = total; //Whatever is left goes to boost
+        weight = total; //Whatever is left goes to weight
         total = 0;
 
     }
@@ -96,9 +92,9 @@ public class Car extends Rectangle {
 
         addedTime = addedTime * (1/(0.9 + (0.02*weight))); //Weight makes a difference but on a smaller scale
 
-        if(isBoosted){
-            addedTime = addedTime * (1/(1 + 0.1*boost)); //Boost can never hurt you when it is structured this way. Even at 1, you're still reducing time.
-        }
+//        if(isBoosted){
+//            addedTime = addedTime * (1/(1 + 0.1*boost)); //Boost can never hurt you when it is structured this way. Even at 1, you're still reducing time.
+//        }
 
         time += addedTime;
     }
@@ -109,6 +105,18 @@ public class Car extends Rectangle {
      */
     public int getIdentifier() {
         return id;
+    }
+    
+    public int getEngine(){
+        return engine;
+    }
+    
+    public int getTires(){
+        return tires;
+    }
+    
+    public int getWeight(){
+        return weight;
     }
 
     /*
