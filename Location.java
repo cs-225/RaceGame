@@ -1,5 +1,3 @@
-package main.java;
-
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -15,7 +13,8 @@ public class Location extends Circle {
     /**
      * The name identifier of the location
      */
-    private String name;
+//    private String name;
+    private char name;
 
     /**
      * Keeps track within the running loop of each turn whether
@@ -30,7 +29,7 @@ public class Location extends Circle {
      * @param offset The width and height of the location
      * @param name   THe name identifier of the location
      */
-    public Location(double x, double y, double offset, String name) { //, Map<Location, Integer> neighbors) {
+    public Location(double x, double y, double offset, char name) { //, Map<Location, Integer> neighbors) {
         super(x, y, offset);
         this.name = name;
         this.setFill(Color.LIMEGREEN);
@@ -41,7 +40,7 @@ public class Location extends Circle {
     /**
      * @return the name of the location
      */
-    public String getName() {
+    public char getName() {
         return name;
     }
 
@@ -83,7 +82,7 @@ public class Location extends Circle {
      * Indicates the last location.
      */
     public void setLastColor() {
-        URL green = getClass().getResource("/main/resources/images/greengif.gif");
+        URL green = getClass().getResource("_greengif.gif");
         this.setFill(new ImagePattern(new Image(green.toString())));
     }
 
