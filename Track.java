@@ -339,7 +339,7 @@ public class Track extends Group {
         for (Car c : cars) if (carVisitedLocations.get(c).size() == locations.size()) finished++;
         if (finished == cars.size()) {
             for (Location local : locations) {
-                URL green = getClass().getResource("_redgif.gif");
+                URL green = getClass().getResource("redgif.gif");
                 local.setFill(new ImagePattern(new Image(green.toString())));
             }
             Car car = cars.get(0);
