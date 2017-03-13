@@ -30,9 +30,6 @@ public class Car extends Rectangle {
     /** Reference to the turn order and identification. TODO: Associate a car to a users name ?? */
     private int id;
 
-    private Color[] colors = { Color.RED, Color.BLUE, Color.BLACK, Color.YELLOW, Color.ORANGE };
-
-    private Color color;
     /**
      * Creates a car.
      * @param x The horizontal location
@@ -47,11 +44,7 @@ public class Car extends Rectangle {
         String[] names = { "bug", "blue", "black", "yellow","orange"};
         URL resource = getClass().getResource("_" + names[id % names.length] + ".png");
         this.setFill(new ImagePattern(new Image(resource.toString())));
-        color = colors[id%colors.length];
     }
-
-    public Color getColor() { return color; }
-
 
     /**
      * Artem
