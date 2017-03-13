@@ -1,4 +1,4 @@
-package main.java;
+//package main.java;
 
 import javafx.animation.PathTransition;
 import javafx.event.EventHandler;
@@ -76,6 +76,10 @@ public class Track extends Group {
     private ArrayList<Text> locationLabels;
     private ArrayList<Text> carLabels;
     private Text activeCarLabel;
+    //private ArrayList<Text> stats;
+    private Text activeCarEngine;
+    private Text activeCarTires;
+    private Text activeCarWeight;
     private Rectangle activeCarBox;
 
     /**
@@ -89,6 +93,7 @@ public class Track extends Group {
         carEndLocation = new HashMap<>();
         carCurrentLocation = new HashMap<>();
         locationLabels = new ArrayList<>();
+        //stats = new ArrayList<>();
         carLabels = new ArrayList<>();
     }
 
@@ -223,6 +228,9 @@ public class Track extends Group {
         activeCarLabel.setFont(Font.font(30));
         activeCarBox = new Rectangle(activeCar.getWidth(), activeCar.getHeight());
         activeCarBox.setFill(activeCar.getFill());
+        activeCarEngine = new Text("Engine: " + (activeCar.getEngine()));
+        activeCarTires = new Text("Tires: " + (activeCar.getTires()));
+        activeCarWeight = new Text("Weight: " + (activeCar.getWeight()));
 
         gridPane.add(gpLocations, 0, 1);
         gridPane.add(new Rectangle(200, 200, Color.TRANSPARENT), 0, 2);
@@ -230,6 +238,9 @@ public class Track extends Group {
         gridPane.add(new Rectangle(200, 200, Color.TRANSPARENT), 0, 4);
         gridPane.add(activeCarLabel, 0, 5);
         gridPane.add(activeCarBox, 0, 6);
+        gridPane.add(activeCarEngine, 0, 7);
+        gridPane.add(activeCarTires, 0, 8);
+        gridPane.add(activeCarWeight, 0, 9);
         gridPane.setLayoutX(sceneX - 300);
         this.getChildren().add(gridPane);
     }
@@ -247,6 +258,9 @@ public class Track extends Group {
                     String.format("%.1f", carCurrentLocation.get(activeCar).getDistanceToLocation(locations.get(j))));
         }
         activeCarLabel.setText("Active Car:\t" + (activeCar.getIdentifier() + 1));
+        activeCarEngine.setText("Engine: " + (activeCar.getEngine()));
+        activeCarTires.setText("Tires: " + (activeCar.getTires()));
+        activeCarWeight.setText("Weight: " + (activeCar.getWeight()));
         activeCarBox.setFill(activeCar.getFill());
     }
 
