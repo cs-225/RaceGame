@@ -3,7 +3,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -71,19 +70,23 @@ public class Track extends Group {
      */
     private Map<Car, ArrayList<Location>> carVisitedLocations;
 
-    private ArrayList<Text> locationLabels;
-    private ArrayList<Text> carLabels;
-    private Text activeCarLabel;
-    //private ArrayList<Text> stats;
     private Text activeCarEngine;
     private Text activeCarTires;
     private Text activeCarWeight;
+
+    private ArrayList<Text> locationLabels;
+    private ArrayList<Text> carLabels;
+    private Text activeCarLabel;
     private Rectangle activeCarBox;
+
+    private double sceneX, sceneY;
 
     /**
      * Initializes the collections for locations and cars.
      */
-    public Track() {
+    public Track(int numPlayers, double sceneX, double sceneY) {
+        this.sceneX = sceneX;
+        this.sceneY = sceneY;
         locations = new ArrayList<>();
         cars = new ArrayList<>();
         carVisitedLocations = new HashMap<>();
@@ -91,32 +94,28 @@ public class Track extends Group {
         carEndLocation = new HashMap<>();
         carCurrentLocation = new HashMap<>();
         locationLabels = new ArrayList<>();
-        //stats = new ArrayList<>();
         carLabels = new ArrayList<>();
+        double offset = 52;
+        setTrack(numPlayers, offset);
     }
 
     /**
      * The way that the cars and locations are initialized.
      *
      * @param numPlayers The number of locations corresponds to combo-box selection from StartPrompt in View.
-     * @param sceneX     The width of the main Screen from View.
-     * @param sceneY     The height of the main Screen from View.
      */
-    public void setTrack(int numPlayers, double offset, double sceneX, double sceneY) {
+    public void setTrack(int numPlayers, double offset) {
         Random rand = new Random();
         // for the number of players, number of locations changes, the addition of 2 or 3 extra locations is arbitrary
-        //Ensures that numLocation will be odd and greater than numPlayers
         int numLocation = (numPlayers & 1) == 1 ? numPlayers + 2 : numPlayers + 3;
-        createLocations(numLocation, offset, sceneX, sceneY, rand);
+        createLocations(numLocation, offset, rand);
         createCars(numPlayers, offset, rand);
         activeCar = cars.get(0);
         activeCar.setVisible(true);
         carStartLocation.get(activeCar).setActive(false, false);
-        for (Location location : locations){
-            if (carEndLocation.get(activeCar).equals(location)){
+        for (Location location : locations)
+            if (carEndLocation.get(activeCar).equals(location))
                 location.setActive(false, true);
-            }
-        }
         setGridPane(sceneX, sceneY);
     }
 
@@ -125,11 +124,9 @@ public class Track extends Group {
      *
      * @param numLocation Number of locations.
      * @param offset      Relative sizing.
-     * @param sceneX      Scene's width.
-     * @param sceneY      Scene's Height.
      * @param rand        Random number generator.
      */
-    private void createLocations(int numLocation, double offset, double sceneX, double sceneY, Random rand) {
+    private void createLocations(int numLocation, double offset, Random rand) {
         for (int k = 0; k < numLocation; k++) {
             int tmpOffSetX = (int) sceneX - ((int) offset * 2);
             int tmpOffsetY = (int) sceneY - ((int) offset * 2);
@@ -145,14 +142,13 @@ public class Track extends Group {
             if (y < offset) y += (offset + 10);
             if (y > sceneY - offset) y -= (offset + 10);
             if (x > sceneX - offset) x -= (offset + 10);
-            locations.add(new Location(x, y, offset, "Location " + k));            // adds new locations
+            locations.add(new Location(x, y, offset, (char) (k + 65)));            // adds new locations
             locations.get(k).setOnMouseClicked(locationEvent);
-
         }
         for (int i = 0; i < locations.size(); i++) {
             Location toAdd = locations.get(i);
             this.getChildren().add(toAdd);
-            this.getChildren().add(new Text(toAdd.getCenterX(), toAdd.getCenterY(), i + ""));
+            this.getChildren().add(new Text(toAdd.getCenterX(), toAdd.getCenterY(), locations.get(i).getName() + ""));
         }
     }
 
@@ -211,7 +207,7 @@ public class Track extends Group {
 
         gpCars = new GridPane();
         gpCars.setMaxSize(200, sceneY / 3);
-        gpCars.add(new Text("Car\t\tTime (hr)\t\tCurrent\t\tEnd"), 0, 0);
+        gpCars.add(new Text("Car\t\tTime\t\tCurrent\tEnd"), 0, 0);
 
         for (int j = 0; j < cars.size(); j++) {
             Text t = new Text(cars.get(j).toString() + "\t\t\t"
@@ -231,15 +227,18 @@ public class Track extends Group {
         activeCarWeight = new Text("Weight: " + (activeCar.getWeight()));
 
         gridPane.add(gpLocations, 0, 1);
-        gridPane.add(new Rectangle(200, 200, Color.TRANSPARENT), 0, 2);
+        gridPane.add(new Rectangle(50, 50, Color.TRANSPARENT), 0, 2);
         gridPane.add(gpCars, 0, 3);
-        gridPane.add(new Rectangle(200, 200, Color.TRANSPARENT), 0, 4);
+        gridPane.add(new Rectangle(50, 50, Color.TRANSPARENT), 0, 4);
         gridPane.add(activeCarLabel, 0, 5);
         gridPane.add(activeCarBox, 0, 6);
         gridPane.add(activeCarEngine, 0, 7);
         gridPane.add(activeCarTires, 0, 8);
         gridPane.add(activeCarWeight, 0, 9);
+
         gridPane.setLayoutX(sceneX - 300);
+//        gridPane.add(new Rectangle(50,50,Color.TRANSPARENT),0,7);
+        //gridPane.add(....texts.....)
         this.getChildren().add(gridPane);
     }
 
@@ -247,14 +246,12 @@ public class Track extends Group {
      * Updates the cars statistics within the gridPane
      */
     public void updateStats() {
-        for (int i = 0; i < cars.size(); i++){
+        for (int i = 0; i < cars.size(); i++)
             carLabels.get(i).setText(cars.get(i).toString() + "\t\t\t" + carCurrentLocation.get(cars.get(i)).getName()
                     + "\t" + carEndLocation.get(cars.get(i)).getName());
-        }
-        for (int j = 0; j < locations.size(); j++){
+        for (int j = 0; j < locations.size(); j++)
             locationLabels.get(j).setText(
                     String.format("%.1f", carCurrentLocation.get(activeCar).getDistanceToLocation(locations.get(j))));
-        }
         activeCarLabel.setText("Active Car:\t" + (activeCar.getIdentifier() + 1));
         activeCarEngine.setText("Engine: " + (activeCar.getEngine()));
         activeCarTires.setText("Tires: " + (activeCar.getTires()));
@@ -319,15 +316,12 @@ public class Track extends Group {
                 updateStats();
                 carOneMoreLocation = carVisitedLocations.get(activeCar).size() + 1 >= locations.size();
                 for (Location location : locations) {
-                    if (carVisitedLocations.get(activeCar).contains(location)){
+                    if (carVisitedLocations.get(activeCar).contains(location))
                         location.setActive(false, false);
-                    }
-                    if (!carVisitedLocations.get(activeCar).contains(location)){
+                    if (!carVisitedLocations.get(activeCar).contains(location))
                         location.setActive(true, false);
-                    }
-                    if (carEndLocation.get(activeCar).equals(location)){
+                    if (carEndLocation.get(activeCar).equals(location))
                         carEndLocation.get(activeCar).setActive(false, true);
-                    }
                     if (carOneMoreLocation && carEndLocation.get(activeCar).equals(location)) {
                         location.setActive(true, false);
                         location.setLastColor();
@@ -337,37 +331,33 @@ public class Track extends Group {
 
             }
         }
+        checkFinished();
+    };
+
+    private void checkFinished() {
         int finished = 0;
         for (Car c : cars) if (carVisitedLocations.get(c).size() == locations.size()) finished++;
         if (finished == cars.size()) {
-
             for (Location local : locations) {
-                URL green = getClass().getResource("/main/resources/images/redgif.gif");
+                URL green = getClass().getResource("_redgif.gif");
                 local.setFill(new ImagePattern(new Image(green.toString())));
             }
-
             Car car = cars.get(0);
-
             for (Car aCar : cars) {
                 aCar.setVisible(true);
                 if (car.getTime() > aCar.getTime()) car = aCar;
             }
-
-            Text t = new Text("Car #" + (car.getIdentifier() + 1) + " wins!");
-
+            Text t = new Text("Car " + (car.getIdentifier() + 1) + " wins!");
             t.setFont(Font.font(50));
             t.setFill(Color.GREEN);
-            t.setEffect(new Glow());
             t.setTextAlignment(TextAlignment.CENTER);
             t.setTranslateY(100);
             t.setTranslateX(200);
             t.setTranslateZ(300);
-
             this.getChildren().add(t);
-
-            car.setHeight(500);
-            car.setWidth(500);
+            car.setHeight(car.getHeight() + 10);
+            car.setWidth(car.getWidth() + 10);
         }
-    };
+    }
 
 }
