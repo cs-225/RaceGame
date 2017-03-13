@@ -82,7 +82,7 @@ public class Location extends Circle {
      * Indicates the last location.
      */
     public void setLastColor() {
-        URL green = getClass().getResource("_greengif.gif");
+        URL green = getClass().getResource("greengif.gif");
         this.setFill(new ImagePattern(new Image(green.toString())));
     }
 
