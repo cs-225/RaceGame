@@ -353,7 +353,7 @@ public class Track extends Group {
                 if (car.getTime() > aCar.getTime()) car = aCar;
             }
 
-            Text t = new Text("Car #" + car.getIdentifier() + "WINS!!");
+            Text t = new Text("Car #" + (car.getIdentifier() + 1) + " wins!");
 
             t.setFont(Font.font(50));
             t.setFill(Color.GREEN);
