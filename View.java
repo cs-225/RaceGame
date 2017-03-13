@@ -11,6 +11,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
@@ -149,6 +150,17 @@ public class View extends Application {
             Label players = new Label("Number of Players\t");
             players.setStyle("-fx-text-fill: #fff");
 
+            Label l2 = new Label("Rules\n" +
+                    "1. Each player is given a start and an end location.\n" +
+                    "2. You must go to every location on your path from your start to end location. Order does not matter\n" +
+                    "3. Each car has randomly assigned attributes that allow for it to travel faster in certain situations.\n" +
+                    "Tires will affect your acceleration, engine will affect your top speed, and weight will affect both to a smaller degree.\n" +
+                    "A higher acceleration means that you travel quicker between points that are closer together.\n" +
+                    "A higher top speed means you will travel quicker between points that are further apart.\n\n" +
+                    "4.Click each location to travel there. The car with the shortest time wins!");
+            l2.setStyle("-fx-text-fill: #fff");
+
+
             comboBox = new ComboBox<Integer>();
             comboBox.getItems().addAll(2, 3, 4, 5, 15);
             comboBox.setEditable(false);
@@ -157,9 +169,14 @@ public class View extends Application {
 
             GridPane gp = new GridPane();
 
+
             gp.setAlignment(Pos.CENTER);
-            gp.add(players, 0, 0);
-            gp.add(comboBox, 1, 0);
+            gp.add(l2, 1,0);
+            Rectangle rectangle = new Rectangle(100,100);
+            rectangle.setFill(Color.TRANSPARENT);
+            gp.add(rectangle, 0, 1);
+            gp.add(players, 0, 2);
+            gp.add(comboBox, 1, 2);
 
             return gp;
         }
