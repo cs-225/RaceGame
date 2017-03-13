@@ -47,7 +47,7 @@ public class Car extends Rectangle {
         primeStats(18);
         this.id = id;
         String[] names = { "bug", "blue", "black", "yellow","orange"};
-        URL resource = getClass().getResource("_" + names[id % names.length] + ".png");
+        URL resource = getClass().getResource(names[id % names.length] + ".png");
         this.setFill(new ImagePattern(new Image(resource.toString())));
         color = colors[id%colors.length];
     }
