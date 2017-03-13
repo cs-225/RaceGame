@@ -1,5 +1,3 @@
-package main.java;
-
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -17,6 +15,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+
 
 /**
  * TODO: Create and display directions.
@@ -104,15 +103,18 @@ public class View extends Application {
          * Creates a restart button, adds it to the track and adds an event handler for it.
          */
         private EventHandler<MouseEvent> event = mouseEvent -> {
-            track = new Track();
+//            track = new Track();
             comboBox.setDisable(true);
             button.setDisable(true);
             int i = comboBox.getValue() != null ? comboBox.getValue() : 2;
-            track.setTrack(i, 64, scene.getWidth(), scene.getHeight());
+            track = new Track(i, scene.getWidth(),scene.getHeight());
+
             scene.setRoot(track);
             restartButton = new Button("Restart");
             restartButton.setOnMouseClicked(restart);
+
             track.getChildren().add(restartButton);
+            setAlignment(restartButton,Pos.CENTER);
         };
 
         /**
@@ -165,4 +167,3 @@ public class View extends Application {
 
 
 }
-
