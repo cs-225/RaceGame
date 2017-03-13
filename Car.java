@@ -1,4 +1,5 @@
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
@@ -20,7 +21,7 @@ public class Car extends Rectangle {
     /** This is what all the components should add up to. */
     private int total;
 
-//    /** TODO: Turbo boost?? 
+//    /** TODO: Turbo boost??
 //     * This was something we thought about implementing but didn't get a chance to. For the future, maybe.
 //     */
 //    private boolean isBoosted;
@@ -30,6 +31,9 @@ public class Car extends Rectangle {
 
     /** Reference to the turn order and identification. TODO: Associate a car to a users name ?? */
     private int id;
+
+    private Color[] colors = { Color.RED, Color.BLUE, Color.BLACK, Color.YELLOW, Color.ORANGE };
+    private Color color;
 
     /**
      * Creates a car.
@@ -43,9 +47,12 @@ public class Car extends Rectangle {
         primeStats(18);
         this.id = id;
         String[] names = { "bug", "blue", "black", "yellow","orange"};
-        URL resource = getClass().getResource("/main/resources/images/" + names[id % names.length] + ".png");
+        URL resource = getClass().getResource("_" + names[id % names.length] + ".png");
         this.setFill(new ImagePattern(new Image(resource.toString())));
+        color = colors[id%colors.length];
     }
+
+    public Color getColor() { return color; }
 
     /**
      * Artem
@@ -104,15 +111,15 @@ public class Car extends Rectangle {
     public int getIdentifier() {
         return id;
     }
-    
+
     public int getEngine(){
         return engine;
     }
-    
+
     public int getTires(){
         return tires;
     }
-    
+
     public int getWeight(){
         return weight;
     }
